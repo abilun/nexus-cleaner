@@ -1,0 +1,64 @@
+{
+    "apps-pre-releases": [
+        {
+            "path": "^(e3s)|(com\\.epam)",
+            "days": "30"
+        }
+    ],
+    "apps-temp-releases1": [
+        {
+            "path": "^(e3s)|(com\\.epam)",
+            "days": "30"
+        }
+    ],
+    "apps-temp-releases2": [
+        {
+            "path": "^(e3s)|(com\\.epam)",
+            "days": "30"
+        }
+    ],
+    "apps-releases": [
+        {
+            "path": "^e3s",
+            "days": "30"
+        },
+        {
+            "path": "^com\\.epam",
+            "days": "90"
+        }
+    ],
+    "e3s-backup": [
+        {
+            "path": "\/DAILY\/",
+            "days": 7
+        },
+        {
+            "path": "\/WEEKLY\/",
+            "days": 30
+        },
+        {
+            "path": "\/MONTHLY\/",
+            "days": 183
+        }
+    ],
+    "grafana_dump": [
+        {
+            "days": "30"
+        }
+    ],
+    "jenkins": [
+        {
+            "days": "30"
+        }
+    ],
+    "releases": [
+        {
+            "days": "365"
+        }
+    ],
+    "seyren_backup": [
+        {
+            "days": "90"
+        }
+    ]
+}
