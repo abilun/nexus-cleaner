@@ -40,11 +40,11 @@ cli = CLI.new
 cli.parse_options
 
 data_json = JSON.parse(File.read(cli.config[:rules]))
+processed_files = 0
 
-# dir = '/mnt/sdb1/vol-01/'
 Dir.chdir cli.config[:path]
 
-Dir.glob('**/*.properties') do |filename|
+Dir.glob('content/**/*.properties') do |filename|
   File.open(filename, 'r+') do |file|
     repo_name, creation_time, blob_name = ''
     is_deleted = false
@@ -64,7 +64,17 @@ Dir.glob('**/*.properties') do |filename|
         next unless blob_name =~ /#{rule['path']}/
         days_before_today = sub_days(creation_time)
         file.puts('deleted=true') if days_before_today > rule['days'].to_i
+        processed_files += 1
       end
     end
+  end
+end
+
+puts processed_files
+
+if processed_files > 0
+  File.open("#{cli.config[:path]}/metadata.properties", 'r+') do |file|
+    index_line = 'rebuildDeletedBlobIndex=true'
+    file.print("\n#{index_line}") unless file.grep(/#{index_line}/).any?
   end
 end
