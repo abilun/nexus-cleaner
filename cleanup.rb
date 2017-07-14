@@ -26,6 +26,13 @@ class CLI
          required: true,
          description: 'Directory to process'
 
+  option :dry_run,
+         short: '-d',
+         long: '--dry-run',
+         boolean: true,
+         default: false,
+         description: 'Shows processed files without real execution'
+
   option :help,
          short: '-h',
          long: '--help',
@@ -64,9 +71,17 @@ Dir.glob('content/**/*.properties') do |filename|
       data_json[repo_name].each do |rule|
         next unless blob_name =~ /#{rule['path']}/
         days_before_today = sub_days(creation_time)
-        if days_before_today > rule['days'].to_i
-          processed_files += 1
+        next unless days_before_today > rule['days'].to_i
+        processed_files += 1
+        if !cli.config[:dry_run]
           file.puts('deleted=true')
+        else
+          puts "Repo: #{repo_name}"
+          puts "Path: #{blob_name}"
+          puts "Mask: #{rule['path']}"
+          puts "Days by rule: #{rule['days']}"
+          puts "Created days before: #{days_before_today}"
+          puts '-' * 25
         end
       end
     end
@@ -75,9 +90,9 @@ end
 
 puts "Processed files: #{processed_files}"
 
-if processed_files > 0
+if processed_files > 0 && !cli.config[:dry_run]
   File.open("#{cli.config[:path]}/metadata.properties", 'a+') do |file|
     index_line = 'rebuildDeletedBlobIndex=true'
-    file.print(index_line) unless file.grep(/#{index_line}/).any?
+    file.puts(index_line) unless file.grep(/#{index_line}/).any?
   end
 end
