@@ -76,9 +76,10 @@ Dir.glob('content/**/*.properties') do |filename|
         if !cli.config[:dry_run]
           file.puts('deleted=true')
         else
+          puts "Filename: #{File.expand_path(filename)}"
           puts "Repo: #{repo_name}"
-          puts "Path: #{blob_name}"
-          puts "Mask: #{rule['path']}"
+          puts "Blob path: #{blob_name}"
+          puts "Matched mask: #{rule['path']}"
           puts "Days by rule: #{rule['days']}"
           puts "Created days before: #{days_before_today}"
           puts '-' * 25
